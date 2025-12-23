@@ -122,7 +122,6 @@ const invoiceSchema = new mongoose.Schema({
 
 // Add index for faster queries
 invoiceSchema.index({ user: 1, createdAt: -1 });
-invoiceSchema.index({ invoiceNumber: 1 });
 invoiceSchema.index({ status: 1 });
 
 module.exports = mongoose.model('Invoice', invoiceSchema);

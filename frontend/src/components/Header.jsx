@@ -2,16 +2,16 @@ import React, { useState, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
-const Header = ({ user, onLogout }) => {
+const Header = ({ user }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user: authUser } = useContext(AuthContext);
+  const { user: authUser, logout } = useContext(AuthContext);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const handleLogout = () => {
-    onLogout();
-    navigate('/');
+    logout();
+    navigate('/login');
     setShowDropdown(false);
   };
 

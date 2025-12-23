@@ -3,10 +3,11 @@ import { AuthContext } from '../context/AuthContext';
 import AdminStats from '../components/AdminStats';
 import AdminUsers from '../components/AdminUsers';
 import AdminInvoices from '../components/AdminInvoices';
+import Header from '../components/Header';
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState('stats');
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
 
   const tabs = [
     { id: 'stats', label: 'Dashboard', icon: '📊' },
@@ -16,6 +17,7 @@ const AdminPanel = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 animate-fade-in">
+      <Header user={user} />
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Admin Header */}
         <div className="mb-8 animate-slide-up">

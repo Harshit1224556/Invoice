@@ -1,44 +1,57 @@
-const AppRoutes = () => {
-  const { user, loading, logout } = useContext(AuthContext);
+import React, { useEffect, useContext } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, AuthContext } from './context/AuthContext';
+import Landing from './pages/Landing';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import AdminPanel from './pages/AdminPanel';
+import PrintInvoice from './pages/PrintInvoice';
+import ProtectedRoute from './components/ProtectedRoute';
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-white">
-        Loading...
-      </div>
-    );
+const AdminRoute = ({ children, user }) => {
+  const token = localStorage.getItem('token');
+  
+  if (!token) {
+    return <Navigate to="/login" />;
   }
 
+  if (!user?.isAdmin) {
+    return <Navigate to="/dashboard" />;
+  }
+  
+  return children;
+};
+
+const AppRoutes = () => {
+  const { user } = useContext(AuthContext);
+  const token = localStorage.getItem('token');
+
   return (
-    <>
-      {user && <Header user={user} onLogout={logout} />}
-
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
-        <Route path="/register" element={!user ? <Register /> : <Navigate to="/dashboard" />} />
-
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute user={user}>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/admin"
-          element={
-            <AdminRoute user={user}>
-              <AdminPanel />
-            </AdminRoute>
-          }
-        />
-
-        <Route path="/invoice/:id/print" element={<PrintInvoice />} />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-    </>
+    <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route path="/login" element={!token ? <Login /> : <Navigate to="/dashboard" />} />
+      <Route path="/register" element={!token ? <Register /> : <Navigate to="/dashboard" />} />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute user={user}>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          <AdminRoute user={user}>
+            <AdminPanel />
+          </AdminRoute>
+        }
+      />
+      <Route path="/invoice/:id/print" element={<PrintInvoice />} />
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
   );
 };
+
+export default AppRoutes;
