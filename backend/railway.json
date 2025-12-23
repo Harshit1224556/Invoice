@@ -1,0 +1,27 @@
+{
+  "name": "invoice-manager-backend",
+  "runtime": "node18",
+  "env": {
+    "MONGODB_URI": {
+      "description": "MongoDB Atlas connection string",
+      "required": true
+    },
+    "JWT_SECRET": {
+      "description": "JWT secret key (min 32 characters)",
+      "required": true
+    },
+    "NODE_ENV": {
+      "description": "Node environment",
+      "value": "production"
+    },
+    "CORS_ORIGIN": {
+      "description": "CORS origin for frontend",
+      "required": true
+    }
+  },
+  "buildCommand": "npm install",
+  "startCommand": "npm start",
+  "engines": {
+    "node": "18.0.0"
+  }
+}

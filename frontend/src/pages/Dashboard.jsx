@@ -4,7 +4,6 @@ import { AuthContext } from '../context/AuthContext';
 import InvoiceForm from '../components/InvoiceForm';
 import InvoiceList from '../components/InvoiceList';
 import DashboardStats from '../components/DashboardStats';
-import Header from '../components/Header';
 
 const Dashboard = () => {
   const [invoices, setInvoices] = useState([]);
@@ -61,8 +60,6 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 animate-fade-in">
-      <Header user={user} onLogout={logout} />
-      
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Welcome Section */}
         <div className="mb-8 animate-slide-up">

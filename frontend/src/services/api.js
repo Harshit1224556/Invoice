@@ -15,7 +15,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Auth Services
+
 export const authService = {
   register: (userData) => api.post('/auth/register', userData),
   login: (credentials) => api.post('/auth/login', credentials),
@@ -23,7 +23,7 @@ export const authService = {
   updateProfile: (userData) => api.put('/auth/profile', userData),
 };
 
-// Invoice Services
+
 export const invoiceService = {
   getInvoices: () => api.get('/invoices'),
   getInvoice: (id) => api.get(`/invoices/${id}`),
@@ -33,7 +33,7 @@ export const invoiceService = {
   getDashboardStats: () => api.get('/invoices/stats'),
 };
 
-// Admin Services
+
 export const adminService = {
   getAllUsers: () => api.get('/admin/users'),
   getUserDetails: (id) => api.get(`/admin/users/${id}`),

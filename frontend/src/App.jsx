@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 import AdminPanel from './pages/AdminPanel';
 import PrintInvoice from './pages/PrintInvoice';
 import ProtectedRoute from './components/ProtectedRoute';
+import Header from './components/Header';
 
 const AdminRoute = ({ children, user }) => {
   const token = localStorage.getItem('token');
@@ -24,33 +25,36 @@ const AdminRoute = ({ children, user }) => {
 };
 
 const AppRoutes = () => {
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
   const token = localStorage.getItem('token');
 
   return (
-    <Routes>
-      <Route path="/" element={<Landing />} />
-      <Route path="/login" element={!token ? <Login /> : <Navigate to="/dashboard" />} />
-      <Route path="/register" element={!token ? <Register /> : <Navigate to="/dashboard" />} />
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute user={user}>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin"
-        element={
-          <AdminRoute user={user}>
-            <AdminPanel />
-          </AdminRoute>
-        }
-      />
-      <Route path="/invoice/:id/print" element={<PrintInvoice />} />
-      <Route path="*" element={<Navigate to="/" />} />
-    </Routes>
+    <>
+      {token && user && <Header user={user} onLogout={logout} />}
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={!token ? <Login /> : <Navigate to="/dashboard" />} />
+        <Route path="/register" element={!token ? <Register /> : <Navigate to="/dashboard" />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute user={user}>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute user={user}>
+              <AdminPanel />
+            </AdminRoute>
+          }
+        />
+        <Route path="/invoice/:id/print" element={<PrintInvoice />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </>
   );
 };
 

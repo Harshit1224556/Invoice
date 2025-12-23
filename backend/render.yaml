@@ -1,0 +1,24 @@
+{
+  "name": "invoice-manager-backend",
+  "builder": "buildpacks",
+  "env": {
+    "MONGODB_URI": {
+      "description": "MongoDB Atlas connection string"
+    },
+    "JWT_SECRET": {
+      "description": "JWT secret key"
+    },
+    "NODE_ENV": "production",
+    "CORS_ORIGIN": {
+      "description": "Frontend URL for CORS"
+    }
+  },
+  "services": [
+    {
+      "name": "web",
+      "plan": "starter",
+      "buildCommand": "npm install",
+      "startCommand": "npm start"
+    }
+  ]
+}
