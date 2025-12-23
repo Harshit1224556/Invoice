@@ -38,10 +38,13 @@ exports.register = async (req, res) => {
 
     if (user) {
       res.status(201).json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        company: user.company,
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          company: user.company,
+          isAdmin: user.isAdmin
+        },
         token: generateToken(user._id)
       });
     } else {
@@ -70,10 +73,13 @@ exports.login = async (req, res) => {
 
     if (user && (await user.matchPassword(password))) {
       res.json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        company: user.company,
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          company: user.company,
+          isAdmin: user.isAdmin
+        },
         token: generateToken(user._id)
       });
     } else {
@@ -93,7 +99,17 @@ exports.getProfile = async (req, res) => {
     const user = await User.findById(req.user._id).select('-password');
     
     if (user) {
-      res.json(user);
+      res.json({
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          company: user.company,
+          address: user.address,
+          phone: user.phone,
+          isAdmin: user.isAdmin
+        }
+      });
     } else {
       res.status(404).json({ message: 'User not found' });
     }
