@@ -1,25 +1,13 @@
-import React, { useContext } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, AuthContext } from './context/AuthContext';
-
-import Landing from './pages/Landing';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
-import AdminPanel from './pages/AdminPanel';
-import PrintInvoice from './pages/PrintInvoice';
-
-import ProtectedRoute from './components/ProtectedRoute';
-import Header from './components/Header';
-
-const AdminRoute = ({ children, user }) => {
-  if (!user) return <Navigate to="/login" />;
-  if (!user.isAdmin) return <Navigate to="/dashboard" />;
-  return children;
-};
-
 const AppRoutes = () => {
-  const { user, logout } = useContext(AuthContext);
+  const { user, loading, logout } = useContext(AuthContext);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-white">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <>
@@ -54,15 +42,3 @@ const AppRoutes = () => {
     </>
   );
 };
-
-function App() {
-  return (
-    <Router>
-      <AuthProvider>
-        <AppRoutes />
-      </AuthProvider>
-    </Router>
-  );
-}
-
-export default App;

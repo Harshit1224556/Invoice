@@ -1,11 +1,6 @@
-import React, { createContext, useState, useCallback, useEffect } from 'react';
-import { authService } from '../services/api';
-
-export const AuthContext = createContext();
-
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // ✅ start true
   const [error, setError] = useState(null);
 
   const login = useCallback(async (email, password) => {
@@ -17,7 +12,6 @@ export const AuthProvider = ({ children }) => {
       setUser(response.data.user);
       return response.data;
     } catch (err) {
-      console.error('Login Error Details:', err.response?.data || err.message);
       const message = err.response?.data?.message || 'Login failed';
       setError(message);
       throw err;
@@ -35,7 +29,6 @@ export const AuthProvider = ({ children }) => {
       setUser(response.data.user);
       return response.data;
     } catch (err) {
-      console.error('Register Error Details:', err.response?.data || err.message);
       const message = err.response?.data?.message || 'Registration failed';
       setError(message);
       throw err;
@@ -52,17 +45,20 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const loadProfile = async () => {
       const token = localStorage.getItem('token');
-      if (!token) return;
-      setLoading(true);
+
+      if (!token) {
+        setLoading(false);        // ✅ important
+        return;
+      }
+
       try {
         const response = await authService.getProfile();
-        // backend expected to return the user object under response.data.user
-        setUser(response.data.user || response.data);
-      } catch (err) {
+        setUser(response.data.user);
+      } catch {
         localStorage.removeItem('token');
         setUser(null);
       } finally {
-        setLoading(false);
+        setLoading(false);        // ✅ always end loading
       }
     };
 
