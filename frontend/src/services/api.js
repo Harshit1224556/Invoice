@@ -33,4 +33,14 @@ export const invoiceService = {
   getDashboardStats: () => api.get('/invoices/stats'),
 };
 
+// Admin Services
+export const adminService = {
+  getAllUsers: () => api.get('/admin/users'),
+  getUserDetails: (id) => api.get(`/admin/users/${id}`),
+  toggleAdminStatus: (id) => api.put(`/admin/users/${id}/toggle-admin`),
+  deleteUser: (id) => api.delete(`/admin/users/${id}`),
+  getAllInvoices: () => api.get('/admin/invoices'),
+  getSystemStats: () => api.get('/admin/stats'),
+};
+
 export default api;

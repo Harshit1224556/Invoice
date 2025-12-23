@@ -17,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/invoices', require('./routes/invoiceRoutes'));
+app.use('/api/admin', require('./routes/adminRoutes'));
 
 
 app.get('/api/health', (req, res) => {

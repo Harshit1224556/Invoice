@@ -1,10 +1,27 @@
 import React, { useEffect, useContext } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, AuthContext } from './context/AuthContext';
+import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import AdminPanel from './pages/AdminPanel';
+import PrintInvoice from './pages/PrintInvoice';
 import ProtectedRoute from './components/ProtectedRoute';
+
+const AdminRoute = ({ children, user }) => {
+  const token = localStorage.getItem('token');
+  
+  if (!token) {
+    return <Navigate to="/login" />;
+  }
+
+  if (!user?.isAdmin) {
+    return <Navigate to="/dashboard" />;
+  }
+  
+  return children;
+};
 
 const AppRoutes = () => {
   const { user } = useContext(AuthContext);
@@ -12,6 +29,7 @@ const AppRoutes = () => {
 
   return (
     <Routes>
+      <Route path="/" element={<Landing />} />
       <Route path="/login" element={!token ? <Login /> : <Navigate to="/dashboard" />} />
       <Route path="/register" element={!token ? <Register /> : <Navigate to="/dashboard" />} />
       <Route
@@ -22,7 +40,16 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-      <Route path="/" element={<Navigate to={token ? "/dashboard" : "/login"} />} />
+      <Route
+        path="/admin"
+        element={
+          <AdminRoute user={user}>
+            <AdminPanel />
+          </AdminRoute>
+        }
+      />
+      <Route path="/invoice/:id/print" element={<PrintInvoice />} />
+      <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
 };

@@ -1,30 +1,37 @@
 import React from 'react';
 
 const DashboardStats = ({ stats }) => {
+  // Use backend keys: totalRevenue (sum of paid), totalOutstanding, paidInvoices (count), pendingInvoices (count)
+  const totalInvoices = stats?.totalInvoices || 0;
+  const totalRevenue = parseFloat(stats?.totalRevenue || 0);
+  const totalOutstanding = parseFloat(stats?.totalOutstanding || 0);
+  const paidCount = stats?.paidInvoices || 0;
+  const pendingCount = stats?.pendingInvoices || 0;
+
   const statCards = [
     {
       label: 'Total Invoices',
-      value: stats?.totalInvoices || 0,
+      value: totalInvoices,
       icon: '📄',
       color: 'from-blue-500 to-blue-600',
     },
     {
-      label: 'Total Amount',
-      value: `₹${(stats?.totalAmount || 0).toFixed(2)}`,
+      label: 'Total Revenue',
+      value: `₹${totalRevenue.toFixed(2)}`,
       icon: '💰',
       color: 'from-green-500 to-green-600',
     },
     {
-      label: 'Paid',
-      value: `₹${(stats?.totalPaid || 0).toFixed(2)}`,
-      icon: '✅',
-      color: 'from-emerald-500 to-emerald-600',
-    },
-    {
-      label: 'Pending',
-      value: `₹${(stats?.totalPending || 0).toFixed(2)}`,
+      label: 'Outstanding',
+      value: `₹${totalOutstanding.toFixed(2)}`,
       icon: '⏳',
       color: 'from-orange-500 to-orange-600',
+    },
+    {
+      label: 'Paid (count)',
+      value: paidCount,
+      icon: '✅',
+      color: 'from-emerald-500 to-emerald-600',
     },
   ];
 

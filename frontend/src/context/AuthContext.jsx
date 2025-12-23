@@ -1,4 +1,4 @@
-import React, { createContext, useState, useCallback } from 'react';
+import React, { createContext, useState, useCallback, useEffect } from 'react';
 import { authService } from '../services/api';
 
 export const AuthContext = createContext();
@@ -45,6 +45,26 @@ export const AuthProvider = ({ children }) => {
   const logout = useCallback(() => {
     localStorage.removeItem('token');
     setUser(null);
+  }, []);
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+      setLoading(true);
+      try {
+        const response = await authService.getProfile();
+        // backend expected to return the user object under response.data.user
+        setUser(response.data.user || response.data);
+      } catch (err) {
+        localStorage.removeItem('token');
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProfile();
   }, []);
 
   return (

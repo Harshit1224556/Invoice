@@ -78,12 +78,45 @@ const Dashboard = () => {
         {/* Create Invoice Button */}
         {!showForm && (
           <div className="mb-8 animate-slide-up">
-            <button
-              onClick={() => setShowForm(true)}
-              className="gradient-primary text-white font-bold py-4 px-8 rounded-lg shadow-glow hover:shadow-glow-accent transform hover:scale-105 transition-all duration-300"
-            >
-              + Create New Invoice
-            </button>
+            <div className="flex gap-4">
+              <button
+                onClick={() => setShowForm(true)}
+                className="gradient-primary text-white font-bold py-4 px-8 rounded-lg shadow-glow hover:shadow-glow-accent transform hover:scale-105 transition-all duration-300"
+              >
+                + Create New Invoice
+              </button>
+
+              <button
+                onClick={() => {
+                  // Export invoices to CSV
+                  const rows = invoices || [];
+                  if (rows.length === 0) {
+                    alert('No invoices to export');
+                    return;
+                  }
+                  const headers = ['Invoice Number','Client','Email','Total','Status','Due Date'];
+                  const csv = [headers.join(',')].concat(rows.map(r => [
+                    `"${r.invoiceNumber || ''}"`,
+                    `"${r.clientName || ''}"`,
+                    `"${r.clientEmail || ''}"`,
+                    `${(r.total||0).toFixed(2)}`,
+                    `"${r.status || ''}"`,
+                    `"${r.dueDate ? new Date(r.dueDate).toLocaleDateString() : ''}"`
+                  ].join(','))).join('\n');
+
+                  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = 'invoices.csv';
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }}
+                className="bg-white/10 border-2 border-white/20 text-white font-bold py-4 px-6 rounded-lg hover:bg-white/20 transform hover:scale-105 transition-all duration-300"
+              >
+                Export CSV
+              </button>
+            </div>
           </div>
         )}
 
