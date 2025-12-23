@@ -1,18 +1,44 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+const AppRoutes = () => {
+  const { user, loading, logout } = useContext(AuthContext);
 
-const Login = () => <h1>LOGIN PAGE</h1>;
-const Register = () => <h1>REGISTER PAGE</h1>;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-white">
+        Loading...
+      </div>
+    );
+  }
 
-function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
-    </Router>
-  );
-}
+    <>
+      {user && <Header user={user} onLogout={logout} />}
 
-export default App;
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
+        <Route path="/register" element={!user ? <Register /> : <Navigate to="/dashboard" />} />
+
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute user={user}>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute user={user}>
+              <AdminPanel />
+            </AdminRoute>
+          }
+        />
+
+        <Route path="/invoice/:id/print" element={<PrintInvoice />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </>
+  );
+};
