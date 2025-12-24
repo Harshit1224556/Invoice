@@ -18,6 +18,7 @@ export const authService = {
   login: (credentials) => api.post('/api/auth/login', credentials),
   getProfile: () => api.get('/api/auth/profile'),
   updateProfile: (userData) => api.put('/api/auth/profile', userData),
+  logout: () => api.post('/api/auth/logout'),
 };
 
 export const invoiceService = {

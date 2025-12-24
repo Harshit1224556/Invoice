@@ -160,3 +160,17 @@ exports.updateProfile = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// @desc    Logout user
+// @route   POST /api/auth/logout
+// @access  Private
+exports.logout = async (req, res) => {
+  try {
+    // For JWT, logout is handled client-side, but we can log the event
+    console.log(`User ${req.user._id} logged out`);
+    res.json({ message: 'Logged out successfully' });
+  } catch (error) {
+    console.error('Logout Error:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
